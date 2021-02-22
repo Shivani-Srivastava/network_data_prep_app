@@ -12,6 +12,7 @@ shinyServer(function(input, output,session) {
     })
   
   output$sample_data <- renderDataTable({head(data())})
+  
   output$sel_id_var <- renderUI({
     if(is.null(input$file)){
       return(NULL)
@@ -21,6 +22,20 @@ shinyServer(function(input, output,session) {
                   choices = colnames(data()),
                   multiple = FALSE,
                   selected = colnames(data()))
+    }
+  })
+  
+  
+  output$node_attr <- renderUI({
+    if(is.null(input$file)){
+      return(NULL)
+    }else{
+      #print(colnames(data()))
+      df <- data()#[,-(input$id)]
+      selectInput("attr","Select Node Attr",
+                  choices = colnames(df)[!colnames(df) %in% input$id],
+                  multiple = TRUE,
+                  selected = colnames(df)[!colnames(df) %in% input$id])
     }
   })
   
@@ -51,7 +66,7 @@ shinyServer(function(input, output,session) {
     }
   )
   
-  #df_csv <- reactive({})
+  
   # adjaceny download
   output$download_adj_mat <- downloadHandler(
     filename = function() { paste(str_split(input$file$name,"\\.")[[1]][1],"_adj_mat.csv",collapse = " ") },
@@ -62,5 +77,21 @@ shinyServer(function(input, output,session) {
     }
   )
   
+  attr_df <- reactive({
+    df1 <- data()
+    rownames(df1) <-  make.names(df1[,input$id_var], unique=TRUE)
+    df1 <- df1[,input$attr]
+    df1[,input$id_var] <- rownames(df1)
+  })
+  
+
+  output$download_node_attr <- downloadHandler(
+    filename = function() { paste(str_split(input$file$name,"\\.")[[1]][1],"_node_attr.csv",collapse = " ") },
+    content = function(file) {
+      #df_csv <- values$df_data
+      #rownames(df_csv) <- colnames(df_csv)
+      write.csv(attr_df(), file,row.names=FALSE)
+    }
+  )
   
 })

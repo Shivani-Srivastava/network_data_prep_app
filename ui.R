@@ -25,11 +25,11 @@ shinyUI(fluidPage(
                 tabPanel("Overview & Example Dataset",
                          
                          h4(p("Overview")),
-                         p("This app will help you in prepration of input data to network an app.", align = "Justify"),
+                         p("This app will help you in prepration of input data for network an app.", align = "Justify"),
                          hr(),
                          h4(p("How to use this App")),
                          p("", align = "justify"),
-                         p("Upload a csv file from sidebar panel option and It will ask to select ID variable and display list of factor variables for dummy conversion. After selection, It will scale and calculate distance matrix. Now, select threshold from slider input to drop connections. 
+                         p("Upload a csv file from sidebar panel. After uploading data successfully, select identity variable and then adjust threshold from slider input to drop connections. After setting all the parameters, press apply changes. It will now calculate distance between each node and subsequently a downloadable adjacency matrix is made available as an input file to network an app.
                            ", align = "Justify"),
                          h4(p("Input Data Format")),
                          p("Application takes CSV (comma seperated) file as an input. Below is the example
@@ -47,14 +47,18 @@ shinyUI(fluidPage(
                 )  ,
                 
                 
-                tabPanel("Download Datasets", 
+                tabPanel("Download Dataset", 
                          h4("Uploaded Data"),
                          dataTableOutput("sample_data"),
                          h4("Sample Adjaceny Matrix"),
                          dataTableOutput("sample_adj"),
+                         hr(),
                          h4(p("Download Adjacency Matrix")),
-                         downloadButton('download_adj_mat', 'Download Adjaceny Matrix'),br(),br()
-                         
+                         downloadButton('download_adj_mat', 'Download Adjaceny Matrix'),br(),br(),
+                         hr(),
+                        # h4(p("Download Node Attributes")),
+                         #uiOutput("node_attr"),
+                        # downloadButton('download_node_attr', 'Download Node Attributes')
                 )
                 
                 
