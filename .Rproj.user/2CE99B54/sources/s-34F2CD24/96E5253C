@@ -3,7 +3,7 @@
     "path": "D:/R Projects/network_data_prep_app/ui.R",
     "project_path": "ui.R",
     "type": "r_source",
-    "hash": "2383372146",
+    "hash": "3201518881",
     "contents": "",
     "dirty": false,
     "created": 1613993650593.0,
@@ -11,15 +11,15 @@
     "relative_order": 1,
     "properties": {
         "tempName": "Untitled1",
-        "cursorPosition": "60,25",
+        "cursorPosition": "58,25",
         "scrollLine": "46"
     },
     "folds": "",
-    "lastKnownWriteTime": 1614001075,
+    "lastKnownWriteTime": 1614001231,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1614001075060,
+    "last_content_update": 1614001231261,
     "read_only": false,
     "read_only_alternatives": []
 }
