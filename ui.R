@@ -1,6 +1,8 @@
 library(shiny)
 library(tidyverse)
 library(DT)
+library(tibble)
+library(descriptr)
 
 shinyUI(fluidPage(
   
@@ -45,7 +47,14 @@ shinyUI(fluidPage(
                          
                          
                 )  ,
-                
+                tabPanel("Summary Stats",
+                         h4("Dimensions"),
+                         textOutput("df_size"),
+                         hr(),
+                         h4("Summary Report"),
+                         verbatimTextOutput("summ"),
+                         helpText("Note: In case of missing values, use data pre-proc app for imputation"),
+                         ),
                 
                 tabPanel("Download Dataset", 
                          h4("Uploaded Data"),

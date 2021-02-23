@@ -1,10 +1,12 @@
+options(qwraps2_markup = "markdown")
+
 shinyServer(function(input, output,session) {
   data <- reactive({
     if (is.null(input$file)) { 
       return(NULL)
     }else{
       df <- read.csv(input$file$datapath,
-                     stringsAsFactors = FALSE,
+                     stringsAsFactors = TRUE,
                      header = TRUE)
       
       return(df)
@@ -12,6 +14,16 @@ shinyServer(function(input, output,session) {
     })
   
   output$sample_data <- renderDataTable({head(data())})
+  output$df_size <- renderText({paste0("Uploaded data has ",dim(data())[1]," rows and ", dim(data())[2]," columns")})
+  
+  output$summ <- renderPrint(
+    if (is.null(input$file)) { 
+      return(NULL)
+    }else{
+    ds_screener(data())
+      }
+    )
+ # output$summ <- renderText(summary_table(mtcars))
   
   output$sel_id_var <- renderUI({
     if(is.null(input$file)){
@@ -79,9 +91,11 @@ shinyServer(function(input, output,session) {
   
   attr_df <- reactive({
     df1 <- data()
-    rownames(df1) <-  make.names(df1[,input$id_var], unique=TRUE)
+    rownames(df1) <-  make.names(df1[,input$id], unique=TRUE)
     df1 <- df1[,input$attr]
-    df1[,input$id_var] <- rownames(df1)
+    df1 <- tibble::rownames_to_column(df1, input$id)
+    #df1[,input$id] <- rownames(df1)
+    df1
   })
   
 
