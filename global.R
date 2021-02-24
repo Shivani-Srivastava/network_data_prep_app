@@ -46,4 +46,8 @@
   # test-drive above
   # system.time({ adj0 = df2adjacency(input_df, 0.33,"car") }) # 0.05s
   # adj0[1:8,1:8] # view a few
-  
+  add_prefix <- function(x){
+    name(x)
+    x = paste0('end', chrs$endsnp)
+    
+  }

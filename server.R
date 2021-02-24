@@ -44,10 +44,19 @@ shinyServer(function(input, output,session) {
     }else{
       #print(colnames(data()))
       df <- data()#[,-(input$id)]
+      df <- df %>%
+        as_tibble() %>%
+        mutate_if(is.character, factor) 
+       
+       
+      
+      factor_var <- df %>%  select_if(function(col) is.factor(col) &
+                                                 nlevels(col) < 4) %>% colnames()
+      
       selectInput("attr","Select Node Attr",
                   choices = colnames(df)[!colnames(df) %in% input$id],
                   multiple = TRUE,
-                  selected = colnames(df)[!colnames(df) %in% input$id])
+                  selected = factor_var[!colnames(df) %in% input$id])
     }
   })
   
@@ -94,6 +103,9 @@ shinyServer(function(input, output,session) {
     rownames(df1) <-  make.names(df1[,input$id], unique=TRUE)
     df1 <- df1[,input$attr]
     df1 <- tibble::rownames_to_column(df1, input$id)
+    df1 = purrr::imap_dfc(dplyr::select(df1, everything()), function(item, id){
+      paste(id, ": ", item)
+    })
     #df1[,input$id] <- rownames(df1)
     df1
   })
