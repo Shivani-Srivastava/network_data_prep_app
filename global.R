@@ -51,7 +51,7 @@
     # select data type
     summ_df <- data.frame()
     summ_df <- df %>% 
-      summarise_all(typeof) %>% 
+      summarise_all(class) %>% 
       gather() %>% rename("Variable"="key","Datatype"="value")
     mean <- df %>%
       summarise(across(where(is.numeric), mean, na.rm= TRUE))%>%t()
@@ -61,11 +61,18 @@
       summarise(across(where(is.numeric), min, na.rm= TRUE))%>%t()
     max <- df %>%
       summarise(across(where(is.numeric), max, na.rm= TRUE))%>%t()
-    t1 <- as.data.frame(cbind(mean,sd,min,max))
-    names(t1) <- c('Mean',"SD","Min","Max")
+    mode <- sapply(df,function(x) getmode(x))
+    
+    t1 <- as.data.frame(cbind(mean,sd,min,max,mode))
+    names(t1) <- c('Mean',"SD","Min","Max","Mode")
     t2 <- tibble::rownames_to_column(t1, "Variable")%>% mutate_if(is.numeric, round, digits=2)
     t3 <- left_join(summ_df,t2,by=c("Variable"))
     return(t3)
   }
   
+  getmode <- function(v) {
+uniqv <- unique(v)
+uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
   
