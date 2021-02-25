@@ -32,7 +32,7 @@
     
     ## set threshold in percentile terms (can be slider based widget in shiny app)
     #thresh0=0.25  # say. top 25% closest rows only form links
-    thresh1 = quantile(unlist(full_dmat), cutoff_percentile) %>% as.numeric(); thresh1
+    thresh1 = quantile(unlist(full_dmat), cutoff_percentile,na.rm = TRUE) %>% as.numeric(); thresh1
     adj_mat = map_dfc(full_dmat, function(x) {1*(x < thresh1)}) # 0.03s
     adj_mat1 = matrix(adj_mat, n1, n1) # adj_mat1[1:8,1:8]
     
@@ -46,8 +46,26 @@
   # test-drive above
   # system.time({ adj0 = df2adjacency(input_df, 0.33,"car") }) # 0.05s
   # adj0[1:8,1:8] # view a few
-  add_prefix <- function(x){
-    name(x)
-    x = paste0('end', chrs$endsnp)
-    
+  
+  summry_df <- function(df){
+    # select data type
+    summ_df <- data.frame()
+    summ_df <- df %>% 
+      summarise_all(typeof) %>% 
+      gather() %>% rename("Variable"="key","Datatype"="value")
+    mean <- df %>%
+      summarise(across(where(is.numeric), mean, na.rm= TRUE))%>%t()
+    sd <- df %>%
+      summarise(across(where(is.numeric), sd, na.rm= TRUE))%>%t()
+    min <- df %>%
+      summarise(across(where(is.numeric), min, na.rm= TRUE))%>%t()
+    max <- df %>%
+      summarise(across(where(is.numeric), max, na.rm= TRUE))%>%t()
+    t1 <- as.data.frame(cbind(mean,sd,min,max))
+    names(t1) <- c('Mean',"SD","Min","Max")
+    t2 <- tibble::rownames_to_column(t1, "Variable")%>% mutate_if(is.numeric, round, digits=2)
+    t3 <- left_join(summ_df,t2,by=c("Variable"))
+    return(t3)
   }
+  
+  

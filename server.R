@@ -16,11 +16,11 @@ shinyServer(function(input, output,session) {
   output$sample_data <- renderDataTable({head(data())})
   output$df_size <- renderText({paste0("Uploaded data has ",dim(data())[1]," rows and ", dim(data())[2]," columns")})
   
-  output$summ <- renderPrint(
+  output$summ <- renderDataTable(
     if (is.null(input$file)) { 
       return(NULL)
     }else{
-    ds_screener(data())
+      summry_df(data())
       }
     )
  # output$summ <- renderText(summary_table(mtcars))

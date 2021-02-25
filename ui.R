@@ -52,7 +52,9 @@ shinyUI(fluidPage(
                          textOutput("df_size"),
                          hr(),
                          h4("Summary Report"),
-                         verbatimTextOutput("summ"),
+                         #verbatimTextOutput("summ"),
+                         dataTableOutput("summ"),
+                         
                          helpText("Note: In case of missing values, use data pre-proc app for imputation"),
                          ),
                 
