@@ -4,11 +4,18 @@ shinyServer(function(input, output,session) {
   data <- reactive({
     if (is.null(input$file)) { 
       return(NULL)
-    }else{
+    }else if(input$id_col==FALSE){
       df <- read.csv(input$file$datapath,
                      stringsAsFactors = TRUE,
                      header = TRUE)
       
+      return(df)
+    }else{
+      df <- read.csv(input$file$datapath,
+                     stringsAsFactors = TRUE,
+                     header = TRUE)
+      df <- tibble::rowid_to_column(df, "ID")
+      df$ID = paste0('ID_', df$ID)
       return(df)
       }
     })

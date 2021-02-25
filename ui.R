@@ -12,6 +12,7 @@ shinyUI(fluidPage(
   sidebarPanel(
     
     fileInput("file", "Upload CSV"),
+    checkboxInput('id_col',"Create ID variable",value = FALSE),
     uiOutput("sel_id_var"),
     #uiOutput("sel_fac_to_dumm"),
     helpText("selected top x percentile rows will only form links"),
