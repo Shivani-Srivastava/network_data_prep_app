@@ -1,5 +1,25 @@
   ## --- functionize dataframe to adjacency mat for network-an app input 
-  df2adjacency <- function(input_df, cutoff_percentile=0.25,id_var){
+  
+if (!require(lsa)){install.packages("lsa")}; library(lsa) # for cosine func
+
+df2adjacency <- function(df, cutoff=0.25, id_var=1){
+ 
+  metric_ind = NULL
+  for (i0 in 1:ncol(df)){
+    if !(is.charater(df[,i0])) {metric_ind = c(metric_ind, i0)} } # i0 loop ends
+ 
+  df_metric = df[,metric_ind]
+ 
+  df_cosines0 = cosine(t(df_metric))
+ 
+  df_cosines1 = df_cosines0 * (df_cosines0 >= cutoff)
+ 
+  df_out = data.frame(id = df[,id_var], df_cosines1)
+ 
+  return(df_out) } # func ends
+
+
+df2adjacency0 <- function(input_df, cutoff_percentile=0.25,id_var){
     rownames(input_df) <-  make.names(input_df[,id_var], unique=TRUE)
     #rownames(input_df) <- input_df[,id_var]
     input_df[,id_var] <- NULL
