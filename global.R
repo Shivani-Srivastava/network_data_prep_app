@@ -2,14 +2,14 @@
   
 if (!require(lsa)){install.packages("lsa")}; library(lsa) # for cosine func
 
-df2adjacency <- function(df, cutoff=0.25, id_var=1){
+df2adjacency <- function(df, cutoff_percentile=0.25, id_var=1){
  
   metric_ind = NULL
   for (i0 in 1:ncol(df)){
     if (is.numeric(df[,i0])) {metric_ind = c(metric_ind, i0)} } # i0 loop ends
   df_metric = df[,metric_ind]
   df_cosines0 = cosine(t(df_metric))
-  df_cosines1 = df_cosines0 * (df_cosines0 >= cutoff)
+  df_cosines1 = df_cosines0 * (df_cosines0 >= cutoff_percentile)
   df_out = data.frame(id = df[,id_var], df_cosines1)
   return(df_out) } # func ends
 
